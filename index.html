@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keshri Fast Food - Order Online</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: #f4f5f7;
+      color: #1f2937;
+      padding-bottom: 95px;
+    }
+
+    /* Top Header */
+    .topbar {
+      background: #111827;
+      color: #ffffff;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .topbar-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+    }
+
+    .shop-banner {
+      background: linear-gradient(135deg, #e11d48, #be123c);
+      color: #ffffff;
+      padding: 18px 16px 22px;
+      position: relative;
+    }
+
+    .shop-banner-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .shop-name {
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .shop-tagline {
+      font-size: 13px;
+      opacity: 0.95;
+      margin-top: 4px;
+    }
+
+    .owner-btn {
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      backdrop-filter: blur(4px);
+    }
+
+    .owner-btn:active {
+      transform: scale(0.97);
+    }
+
+    .shop-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .meta-badge {
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.25);
+    }
+
+    .status-open {
+      background: #15803d;
+      color: #fff;
+    }
+
+    .status-closed {
+      background: #4b5563;
+      color: #fff;
+    }
+
+    /* Order Mode Toggle */
+    .mode-switch-wrap {
+      padding: 0 14px;
+      margin-top: -12px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .mode-switch {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 5px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    .mode-btn {
+      border: none;
+      padding: 10px 8px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      background: transparent;
+      color: #374151;
+    }
+
+    .mode-btn.active {
+      background: #e11d48;
+      color: #ffffff;
+    }
+
+    .delivery-info-strip {
+      margin: 10px 14px 0;
+      background: #fff1f2;
+      border: 1px solid #fecdd3;
+      color: #9f1239;
+      padding: 9px 12px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Search & Filters */
+    .controls {
+      padding: 12px 14px 4px;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .search-box:focus {
+      border-color: #e11d48;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 10px 0 6px;
+      scrollbar-width: none;
+    }
+
+    .filter-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-chip {
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      color: #374151;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .filter-chip.active {
+      background: #be123c;
+      color: #ffffff;
+      border-color: #be123c;
+    }
+
+    /* Menu Cards */
+    .menu-list {
+      padding: 8px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .item-card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .veg-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 15px;
+      height: 15px;
+      border: 1.8px solid #16a34a;
+      border-radius: 3px;
+      margin-bottom: 6px;
+    }
+
+    .veg-icon::after {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #16a34a;
+    }
+
+    .nonveg-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 15px;
+      height: 15px;
+      border: 1.8px solid #dc2626;
+      border-radius: 3px;
+      margin-bottom: 6px;
+    }
+
+    .nonveg-icon::after {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #dc2626;
+    }
+
+    .item-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .item-price {
+      font-size: 15px;
+      font-weight: 800;
+      color: #111827;
+      margin-top: 6px;
+    }
+
+    .item-desc {
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .add-btn {
+      background: #fff1f2;
+      color: #e11d48;
+      border: 1.5px solid #fda4af;
+      padding: 8px 16px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      min-width: 86px;
+    }
+
+    .qty-box {
+      display: flex;
+      align-items: center;
+      background: #e11d48;
+      color: #ffffff;
+      border-radius: 9px;
+      overflow: hidden;
+      min-width: 86px;
+      justify-content: space-between;
+    }
+
+    .qty-box button {
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 7px 10px;
+      cursor: pointer;
+    }
+
+    .qty-box span {
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    /* Cart Bar */
+    .cart-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #15803d;
+      color: #ffffff;
+      padding: 12px 16px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 45;
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.14);
+    }
+
+    .cart-bar.show {
+      display: flex;
+    }
+
+    .cart-info {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .cart-open-btn {
+      background: #ffffff;
+      color: #15803d;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 60;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .modal-sheet {
+      background: #ffffff;
+      width: 100%;
+      max-width: 540px;
+      max-height: 88vh;
+      overflow-y: auto;
+      border-top-left-radius: 18px;
+      border-top-right-radius: 18px;
+      padding: 18px 16px 28px;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .close-btn {
+      background: #f3f4f6;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: #374151;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 9px;
+      font-size: 14px;
+    }
+
+    .bill-box {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 12px;
+      margin: 12px 0;
+    }
+
+    .bill-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #374151;
+    }
+
+    .bill-row.total {
+      border-top: 1px dashed #cbd5e1;
+      padding-top: 8px;
+      margin-top: 8px;
+      margin-bottom: 0;
+      font-size: 16px;
+      font-weight: 800;
+      color: #111827;
+    }
+
+    .primary-btn {
+      width: 100%;
+      background: #16a34a;
+      color: #ffffff;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    .secondary-btn {
+      width: 100%;
+      background: #e11d48;
+      color: #ffffff;
+      border: none;
+      padding: 10px;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 6px;
+    }
+
+    .owner-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #f3f4f6;
+      gap: 8px;
+    }
+
+    .small-btn {
+      padding: 6px 10px;
+      border-radius: 7px;
+      border: 1px solid #d1d5db;
+      background: #f9fafb;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .danger-btn {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-color: #fca5a5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-title">KESHRI FAST FOOD</div>
+    <div id="topbarModeText" style="font-size: 12px; opacity: 0.85;">Self-Pickup</div>
+  </div>
+
+  <div class="shop-banner">
+    <div class="shop-banner-top">
+      <div>
+        <div class="shop-name">Keshri Fast Food</div>
+        <div class="shop-tagline">Fresh, Hot &amp; Tasty Street Food</div>
+      </div>
+      <button class="owner-btn" onclick="openOwnerLockModal()">🔒 Owner</button>
+    </div>
+    <div class="shop-meta">
+      <span id="shopStatusBadge" class="meta-badge status-open">• OPEN</span>
+      <span class="meta-badge">★ 4.6 (250+)</span>
+      <span class="meta-badge">⏱ 15-20 mins</span>
+    </div>
+  </div>
+
+  <div class="mode-switch-wrap">
+    <div class="mode-switch">
+      <button id="btnPickup" class="mode-btn active" onclick="setOrderMode('Self-Pickup')">🛍️ Self-Pickup</button>
+      <button id="btnDelivery" class="mode-btn" onclick="setOrderMode('Home Delivery')">🛵 Home Delivery</button>
+    </div>
+  </div>
+
+  <div id="deliveryStrip" class="delivery-info-strip" style="display: none;"></div>
+
+  <div class="controls">
+    <input id="searchInput" class="search-box" type="text" placeholder="Search rolls, chowmein, momos..." oninput="renderMenu()" />
+    <div class="filter-row">
+      <button class="filter-chip active" data-filter="ALL" onclick="setFilter('ALL', this)">All</button>
+      <button class="filter-chip" data-filter="VEG" onclick="setFilter('VEG', this)">🟢 Veg Only</button>
+      <button class="filter-chip" data-filter="NONVEG" onclick="setFilter('NONVEG', this)">🔴 Non-Veg</button>
+      <button class="filter-chip" data-filter="Rolls" onclick="setFilter('Rolls', this)">Rolls</button>
+      <button class="filter-chip" data-filter="Snacks" onclick="setFilter('Snacks', this)">Snacks</button>
+    </div>
+  </div>
+
+  <div id="menuList" class="menu-list"></div>
+
+  <!-- Cart Bar -->
+  <div id="cartBar" class="cart-bar">
+    <div class="cart-info" id="cartSummaryText">0 Items | ₹0</div>
+    <button class="cart-open-btn" onclick="openCartModal()">View Order →</button>
+  </div>
+
+  <!-- Cart & Checkout Modal -->
+  <div id="cartModal" class="modal-backdrop">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="modal-title">Your Order (Cart)</div>
+        <button class="close-btn" onclick="closeModal('cartModal')">✕</button>
+      </div>
+      <div id="cartItemsContainer"></div>
+
+      <div id="deliveryZoneSection" class="form-group" style="display: none; margin-top: 12px;">
+        <label>Delivery Distance *</label>
+        <select id="deliveryDistanceSelect" class="form-select" onchange="updateDeliveryDistance()">
+          <option value="UP_TO_2KM">Up to 2 km (₹20)</option>
+          <option value="ABOVE_2KM">Above 2 km (₹50)</option>
+        </select>
+      </div>
+
+      <div id="cartBillBox" class="bill-box"></div>
+
+      <div class="form-group">
+        <label>Your Name *</label>
+        <input id="custName" class="form-input" type="text" placeholder="Enter your name" />
+      </div>
+      <div class="form-group">
+        <label>Mobile Number *</label>
+        <input id="custPhone" class="form-input" type="tel" placeholder="10-digit mobile number" />
+      </div>
+      <div id="addressGroup" class="form-group" style="display: none;">
+        <label>Delivery Address *</label>
+        <input id="custAddress" class="form-input" type="text" placeholder="House / Street / Landmark" />
+      </div>
+      <div class="form-group">
+        <label>Special Instructions (Optional)</label>
+        <input id="custNote" class="form-input" type="text" placeholder="e.g. Less spicy, extra sauce" />
+      </div>
+
+      <button class="primary-btn" onclick="sendOrderToWhatsApp()">Send Order on WhatsApp</button>
+    </div>
+  </div>
+
+  <!-- Owner PIN Lock Modal -->
+  <div id="pinModal" class="modal-backdrop">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="modal-title">🔒 Owner PIN Lock</div>
+        <button class="close-btn" onclick="closeModal('pinModal')">✕</button>
+      </div>
+      <p style="font-size: 13px; color: #4b5563; margin-bottom: 12px;">
+        Only the shop owner can open this section. Enter your Owner PIN to continue.
+      </p>
+      <div class="form-group">
+        <label>Owner PIN</label>
+        <input id="ownerPinInput" class="form-input" type="password" inputmode="numeric" maxlength="8" placeholder="Enter PIN" onkeydown="if(event.key==='Enter') verifyOwnerPin()" />
+      </div>
+      <button class="primary-btn" onclick="verifyOwnerPin()">Unlock Owner Panel</button>
+    </div>
+  </div>
+
+  <!-- Owner Panel Modal -->
+  <div id="ownerModal" class="modal-backdrop">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="modal-title">⚙️ Owner Control Panel</div>
+        <button class="close-btn" onclick="closeModal('ownerModal')">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label>Owner WhatsApp Number (with country code, e.g. 919876543210)</label>
+        <input id="ownerWhatsappInput" class="form-input" type="tel" placeholder="91XXXXXXXXXX" />
+      </div>
+
+      <div class="form-group">
+        <label>Shop Status</label>
+        <select id="ownerShopStatus" class="form-select">
+          <option value="OPEN">OPEN</option>
+          <option value="CLOSED">CLOSED</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Delivery Charges (₹)</label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div>
+            <small style="display:block; color:#4b5563; margin-bottom:3px;">Up to 2 km (₹)</small>
+            <input id="ownerChargeUpTo2Km" class="form-input" type="number" min="0" placeholder="20" />
+          </div>
+          <div>
+            <small style="display:block; color:#4b5563; margin-bottom:3px;">Above 2 km (₹)</small>
+            <input id="ownerChargeAbove2Km" class="form-input" type="number" min="0" placeholder="50" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Change Owner PIN</label>
+        <input id="ownerNewPinInput" class="form-input" type="text" inputmode="numeric" placeholder="e.g. 2026" />
+      </div>
+
+      <button class="primary-btn" onclick="saveOwnerSettings()">Save Settings</button>
+
+      <hr style="margin: 18px 0; border: none; border-top: 1px solid #e5e7eb;" />
+
+      <div style="font-size: 15px; font-weight: 800; margin-bottom: 10px;">Add New Item</div>
+      <div class="form-group">
+        <label>Item Name</label>
+        <input id="newItemName" class="form-input" type="text" placeholder="e.g. Veg Chowmein" />
+      </div>
+      <div class="form-group">
+        <label>Price (₹)</label>
+        <input id="newItemPrice" class="form-input" type="number" placeholder="e.g. 70" />
+      </div>
+      <div class="form-group">
+        <label>Short Description (Optional)</label>
+        <input id="newItemDesc" class="form-input" type="text" placeholder="e.g. Freshly tossed noodles" />
+      </div>
+      <div class="form-group">
+        <label>Category &amp; Type</label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <select id="newItemCat" class="form-select">
+            <option value="Rolls">Rolls</option>
+            <option value="Snacks">Snacks</option>
+          </select>
+          <select id="newItemType" class="form-select">
+            <option value="VEG">Veg</option>
+            <option value="NONVEG">Non-Veg</option>
+          </select>
+        </div>
+      </div>
+      <button class="secondary-btn" onclick="addNewMenuItem()">+ Add to Menu</button>
+
+      <hr style="margin: 18px 0; border: none; border-top: 1px solid #e5e7eb;" />
+
+      <div style="font-size: 15px; font-weight: 800; margin-bottom: 8px;">Existing Menu (Edit Price or Delete)</div>
+      <div id="ownerMenuList"></div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "keshri_fast_food_en_v2";
+
+    const defaultState = {
+      whatsappNumber: "",
+      shopStatus: "OPEN",
+      ownerPin: "2026",
+      orderMode: "Self-Pickup",
+      deliveryDistance: "UP_TO_2KM", // UP_TO_2KM or ABOVE_2KM
+      chargeUpTo2Km: 20,
+      chargeAbove2Km: 50,
+      items: [
+        { id: 1, name: "Paneer Roll", price: 60, category: "Rolls", type: "VEG", desc: "Spiced paneer wrapped in crispy paratha" },
+        { id: 2, name: "Egg Roll", price: 50, category: "Rolls", type: "NONVEG", desc: "Classic single egg Kolkata style roll" },
+        { id: 3, name: "Double Egg Roll", price: 60, category: "Rolls", type: "NONVEG", desc: "Loaded with double egg for extra taste" },
+        { id: 4, name: "Chilli Chicken Roll", price: 80, category: "Rolls", type: "NONVEG", desc: "Spicy chilli chicken in a crispy roll" },
+        { id: 5, name: "Egg Chilli Chicken Roll", price: 90, category: "Rolls", type: "NONVEG", desc: "Egg and chilli chicken combo roll" }
+      ]
+    };
+
+    let state = loadState();
+    let cart = {};
+    let activeFilter = "ALL";
+    let ownerUnlocked = false;
+
+    function loadState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return JSON.parse(JSON.stringify(defaultState));
+        const parsed = JSON.parse(saved);
+        return {
+          ...defaultState,
+          ...parsed,
+          chargeUpTo2Km: Number.isFinite(Number(parsed.chargeUpTo2Km)) ? Number(parsed.chargeUpTo2Km) : 20,
+          chargeAbove2Km: Number.isFinite(Number(parsed.chargeAbove2Km)) ? Number(parsed.chargeAbove2Km) : 50,
+          items: Array.isArray(parsed.items) && parsed.items.length ? parsed.items : defaultState.items
+        };
+      } catch (e) {
+        return JSON.parse(JSON.stringify(defaultState));
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function getDeliveryFee() {
+      if (state.orderMode !== "Home Delivery") return 0;
+      return state.deliveryDistance === "ABOVE_2KM"
+        ? Number(state.chargeAbove2Km ?? 50)
+        : Number(state.chargeUpTo2Km ?? 20);
+    }
+
+    function getDeliveryDistanceLabel() {
+      const fee = getDeliveryFee();
+      if (state.deliveryDistance === "ABOVE_2KM") {
+        return `Above 2 km (₹${fee})`;
+      }
+      return `Up to 2 km (₹${fee})`;
+    }
+
+    function syncDeliveryUI() {
+      const isDelivery = state.orderMode === "Home Delivery";
+      const strip = document.getElementById("deliveryStrip");
+      const zoneSection = document.getElementById("deliveryZoneSection");
+      const addrGroup = document.getElementById("addressGroup");
+      const distSelect = document.getElementById("deliveryDistanceSelect");
+
+      if (distSelect) {
+        distSelect.options[0].text = `Up to 2 km (₹${state.chargeUpTo2Km})`;
+        distSelect.options[1].text = `Above 2 km (₹${state.chargeAbove2Km})`;
+        distSelect.value = state.deliveryDistance || "UP_TO_2KM";
+      }
+
+      if (isDelivery) {
+        strip.style.display = "block";
+        strip.textContent = `🛵 Delivery Charge: Up to 2 km = ₹${state.chargeUpTo2Km} | Above 2 km = ₹${state.chargeAbove2Km}`;
+      } else {
+        strip.style.display = "none";
+      }
+
+      if (zoneSection) zoneSection.style.display = isDelivery ? "block" : "none";
+      if (addrGroup) addrGroup.style.display = isDelivery ? "block" : "none";
+    }
+
+    function setOrderMode(mode) {
+      state.orderMode = mode;
+      saveState();
+      document.getElementById("btnPickup").classList.toggle("active", mode === "Self-Pickup");
+      document.getElementById("btnDelivery").classList.toggle("active", mode === "Home Delivery");
+      document.getElementById("topbarModeText").textContent = mode;
+      syncDeliveryUI();
+      renderCartBar();
+      if (document.getElementById("cartModal").classList.contains("show")) {
+        renderCartModalContent();
+      }
+    }
+
+    function updateDeliveryDistance() {
+      state.deliveryDistance = document.getElementById("deliveryDistanceSelect").value;
+      saveState();
+      renderCartBar();
+      renderCartModalContent();
+    }
+
+    function setFilter(filter, btnEl) {
+      activeFilter = filter;
+      document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+      if (btnEl) btnEl.classList.add("active");
+      renderMenu();
+    }
+
+    function renderShopMeta() {
+      const badge = document.getElementById("shopStatusBadge");
+      if (state.shopStatus === "OPEN") {
+        badge.textContent = "• OPEN";
+        badge.className = "meta-badge status-open";
+      } else {
+        badge.textContent = "• CLOSED";
+        badge.className = "meta-badge status-closed";
+      }
+      setOrderMode(state.orderMode);
+    }
+
+    function renderMenu() {
+      const query = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+      const container = document.getElementById("menuList");
+
+      const filtered = state.items.filter(item => {
+        const matchesFilter =
+          activeFilter === "ALL" ||
+          (activeFilter === "VEG" && item.type === "VEG") ||
+          (activeFilter === "NONVEG" && item.type === "NONVEG") ||
+          item.category === activeFilter;
+
+        const matchesQuery =
+          !query ||
+          item.name.toLowerCase().includes(query) ||
+          (item.desc && item.desc.toLowerCase().includes(query));
+
+        return matchesFilter && matchesQuery;
+      });
+
+      if (!filtered.length) {
+        container.innerHTML = `<div style="text-align:center; padding: 28px; color:#6b7280;">No items found.</div>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => {
+        const qty = cart[item.id] || 0;
+        const iconClass = item.type === "VEG" ? "veg-icon" : "nonveg-icon";
+        const actionHtml = qty > 0
+          ? `<div class="qty-box">
+               <button onclick="changeQty(${item.id}, -1)">−</button>
+               <span>${qty}</span>
+               <button onclick="changeQty(${item.id}, 1)">+</button>
+             </div>`
+          : `<button class="add-btn" onclick="changeQty(${item.id}, 1)">ADD +</button>`;
+
+        return `
+          <div class="item-card">
+            <div>
+              <div class="${iconClass}"></div>
+              <div class="item-title">${escapeHtml(item.name)}</div>
+              <div class="item-price">₹${Number(item.price)}</div>
+              ${item.desc ? `<div class="item-desc">${escapeHtml(item.desc)}</div>` : ""}
+            </div>
+            <div>${actionHtml}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function changeQty(itemId, delta) {
+      if (state.shopStatus !== "OPEN" && delta > 0) {
+        alert("Shop is currently CLOSED. Please order when open.");
+        return;
+      }
+      const next = (cart[itemId] || 0) + delta;
+      if (next <= 0) {
+        delete cart[itemId];
+      } else {
+        cart[itemId] = next;
+      }
+      renderMenu();
+      renderCartBar();
+    }
+
+    function getCartDetails() {
+      let totalQty = 0;
+      let subtotal = 0;
+      const lines = [];
+
+      for (const item of state.items) {
+        const qty = cart[item.id] || 0;
+        if (qty > 0) {
+          const lineTotal = qty * Number(item.price);
+          totalQty += qty;
+          subtotal += lineTotal;
+          lines.push({ ...item, qty, lineTotal });
+        }
+      }
+
+      const deliveryFee = totalQty > 0 ? getDeliveryFee() : 0;
+      const grandTotal = subtotal + deliveryFee;
+
+      return { totalQty, subtotal, deliveryFee, grandTotal, lines };
+    }
+
+    function renderCartBar() {
+      const { totalQty, grandTotal } = getCartDetails();
+      const bar = document.getElementById("cartBar");
+      if (totalQty > 0) {
+        bar.classList.add("show");
+        document.getElementById("cartSummaryText").textContent = `${totalQty} Items | ₹${grandTotal}`;
+      } else {
+        bar.classList.remove("show");
+      }
+    }
+
+    function renderCartModalContent() {
+      const { subtotal, deliveryFee, grandTotal, lines } = getCartDetails();
+      syncDeliveryUI();
+
+      document.getElementById("cartItemsContainer").innerHTML = lines.map(l => `
+        <div class="owner-item-row">
+          <div>
+            <div style="font-weight:700;">${escapeHtml(l.name)}</div>
+            <div style="font-size:12px; color:#6b7280;">₹${l.price} × ${l.qty}</div>
+          </div>
+          <div style="font-weight:800;">₹${l.lineTotal}</div>
+        </div>
+      `).join("");
+
+      const deliveryRowHtml = state.orderMode === "Home Delivery"
+        ? `<div class="bill-row">
+             <span>Delivery Charge (${escapeHtml(getDeliveryDistanceLabel())})</span>
+             <span>₹${deliveryFee}</span>
+           </div>`
+        : `<div class="bill-row">
+             <span>Delivery Charge (Self-Pickup)</span>
+             <span>₹0</span>
+           </div>`;
+
+      document.getElementById("cartBillBox").innerHTML = `
+        <div class="bill-row">
+          <span>Items Subtotal</span>
+          <span>₹${subtotal}</span>
+        </div>
+        ${deliveryRowHtml}
+        <div class="bill-row total">
+          <span>Total Payable</span>
+          <span>₹${grandTotal}</span>
+        </div>
+      `;
+    }
+
+    function openCartModal() {
+      const { totalQty } = getCartDetails();
+      if (!totalQty) return;
+      renderCartModalContent();
+      document.getElementById("cartModal").classList.add("show");
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("show");
+    }
+
+    function sendOrderToWhatsApp() {
+      const { totalQty, subtotal, deliveryFee, grandTotal, lines } = getCartDetails();
+      if (!totalQty) {
+        alert("Your cart is empty.");
+        return;
+      }
+
+      const cleanNumber = (state.whatsappNumber || "").replace(/\D/g, "");
+      if (!cleanNumber) {
+        alert("Please save the Owner WhatsApp number in the Owner panel first.");
+        return;
+      }
+
+      const name = document.getElementById("custName").value.trim();
+      const phone = document.getElementById("custPhone").value.trim();
+      const address = document.getElementById("custAddress").value.trim();
+      const note = document.getElementById("custNote").value.trim();
+
+      if (!name || !phone) {
+        alert("Please enter your name and mobile number.");
+        return;
+      }
+      if (state.orderMode === "Home Delivery" && !address) {
+        alert("Please enter your delivery address for Home Delivery.");
+        return;
+      }
+
+      const itemText = lines.map(l => `• ${l.name} x ${l.qty} = ₹${l.lineTotal}`).join("\n");
+      const deliveryDetailsLine = state.orderMode === "Home Delivery"
+        ? `Distance: ${getDeliveryDistanceLabel()}\nDelivery Charge: ₹${deliveryFee}\nAddress: ${address}\n`
+        : "";
+
+      const msg =
+        `*New Order - Keshri Fast Food*\n` +
+        `Order Mode: *${state.orderMode}*\n` +
+        `Name: ${name}\n` +
+        `Phone: ${phone}\n` +
+        deliveryDetailsLine +
+        `\n*Items:*\n${itemText}\n\n` +
+        `Items Total: ₹${subtotal}\n` +
+        (state.orderMode === "Home Delivery" ? `Delivery Charge: ₹${deliveryFee}\n` : "") +
+        `*Total Amount: ₹${grandTotal}*` +
+        (note ? `\nNote: ${note}` : "");
+
+      const url = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(msg)}`;
+      window.open(url, "_blank");
+    }
+
+    /* Owner PIN Lock & Panel */
+    function openOwnerLockModal() {
+      if (ownerUnlocked) {
+        openOwnerPanel();
+        return;
+      }
+      document.getElementById("ownerPinInput").value = "";
+      document.getElementById("pinModal").classList.add("show");
+      setTimeout(() => document.getElementById("ownerPinInput").focus(), 100);
+    }
+
+    function verifyOwnerPin() {
+      const entered = document.getElementById("ownerPinInput").value.trim();
+      if (entered === String(state.ownerPin || "2026")) {
+        ownerUnlocked = true;
+        closeModal("pinModal");
+        openOwnerPanel();
+      } else {
+        alert("Incorrect PIN! Only the owner can access this section.");
+        document.getElementById("ownerPinInput").value = "";
+      }
+    }
+
+    function openOwnerPanel() {
+      document.getElementById("ownerWhatsappInput").value = state.whatsappNumber || "";
+      document.getElementById("ownerShopStatus").value = state.shopStatus || "OPEN";
+      document.getElementById("ownerChargeUpTo2Km").value = state.chargeUpTo2Km ?? 20;
+      document.getElementById("ownerChargeAbove2Km").value = state.chargeAbove2Km ?? 50;
+      document.getElementById("ownerNewPinInput").value = state.ownerPin || "2026";
+      renderOwnerMenuList();
+      document.getElementById("ownerModal").classList.add("show");
+    }
+
+    function saveOwnerSettings() {
+      const wa = document.getElementById("ownerWhatsappInput").value.replace(/\D/g, "");
+      const status = document.getElementById("ownerShopStatus").value;
+      const c2 = Number(document.getElementById("ownerChargeUpTo2Km").value);
+      const cMore = Number(document.getElementById("ownerChargeAbove2Km").value);
+      const pin = document.getElementById("ownerNewPinInput").value.trim();
+
+      if (pin && pin.length < 4) {
+        alert("PIN must be at least 4 digits.");
+        return;
+      }
+      if (Number.isNaN(c2) || c2 < 0 || Number.isNaN(cMore) || cMore < 0) {
+        alert("Please enter valid delivery charges (0 or more).");
+        return;
+      }
+
+      state.whatsappNumber = wa;
+      state.shopStatus = status;
+      state.chargeUpTo2Km = c2;
+      state.chargeAbove2Km = cMore;
+      if (pin) state.ownerPin = pin;
+
+      saveState();
+      renderShopMeta();
+      renderCartBar();
+      alert("Settings saved!");
+    }
+
+    function addNewMenuItem() {
+      const name = document.getElementById("newItemName").value.trim();
+      const price = Number(document.getElementById("newItemPrice").value);
+      const desc = document.getElementById("newItemDesc").value.trim();
+      const category = document.getElementById("newItemCat").value;
+      const type = document.getElementById("newItemType").value;
+
+      if (!name || !price || price <= 0) {
+        alert("Please enter a valid item name and price.");
+        return;
+      }
+
+      const newId = Date.now();
+      state.items.push({ id: newId, name, price, category, type, desc });
+      saveState();
+
+      document.getElementById("newItemName").value = "";
+      document.getElementById("newItemPrice").value = "";
+      document.getElementById("newItemDesc").value = "";
+
+      renderMenu();
+      renderOwnerMenuList();
+      alert("Item added to menu!");
+    }
+
+    function editItemPrice(id) {
+      const item = state.items.find(i => i.id === id);
+      if (!item) return;
+      const nextPrice = prompt(`Enter new price (₹) for "${item.name}":`, item.price);
+      if (nextPrice === null) return;
+      const parsed = Number(nextPrice);
+      if (!parsed || parsed <= 0) {
+        alert("Please enter a valid price.");
+        return;
+      }
+      item.price = parsed;
+      saveState();
+      renderMenu();
+      renderOwnerMenuList();
+    }
+
+    function deleteMenuItem(id) {
+      if (!confirm("Remove this item from the menu?")) return;
+      state.items = state.items.filter(i => i.id !== id);
+      delete cart[id];
+      saveState();
+      renderMenu();
+      renderCartBar();
+      renderOwnerMenuList();
+    }
+
+    function renderOwnerMenuList() {
+      const box = document.getElementById("ownerMenuList");
+      box.innerHTML = state.items.map(item => `
+        <div class="owner-item-row">
+          <div>
+            <div style="font-weight:700; font-size:14px;">${escapeHtml(item.name)} — ₹${item.price}</div>
+            <div style="font-size:11px; color:#6b7280;">${item.category} • ${item.type}</div>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button class="small-btn" onclick="editItemPrice(${item.id})">Edit Price</button>
+            <button class="small-btn danger-btn" onclick="deleteMenuItem(${item.id})">Delete</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    renderShopMeta();
+    renderMenu();
+    renderCartBar();
+  </script>
+</body>
+</html>
